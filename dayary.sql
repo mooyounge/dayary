@@ -14,3 +14,5 @@ create sequence seq_diary_id;
 insert into diary values(seq_diary_id.nextval, 'mooyounge','첫 번째 일기','곧점심시간이다..',sysdate);
 insert into diary values(seq_diary_id.nextval, 'mooyounge','두 번째 일기','휴식시간이 끝났다..',sysdate);
 commit;
+
+select * from diary;

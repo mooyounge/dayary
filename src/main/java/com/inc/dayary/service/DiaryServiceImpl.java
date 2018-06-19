@@ -2,6 +2,8 @@ package com.inc.dayary.service;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,11 @@ public class DiaryServiceImpl implements DiaryService{
 	public List<Diary> list() {
 		
 		return diaryDao.getList();
+	}
+
+	@Override
+	public void add(@Valid Diary diary) {
+		diaryDao.add(diary);
 	}
 
 }

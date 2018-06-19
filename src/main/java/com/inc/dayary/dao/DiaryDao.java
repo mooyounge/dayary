@@ -2,6 +2,8 @@ package com.inc.dayary.dao;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -16,6 +18,10 @@ public class DiaryDao {
 	
 	public List<Diary> getList() {
 		return sqlSession.selectList("diary.list");
+	}
+
+	public void add(@Valid Diary diary) {
+		sqlSession.insert("diary.insert",diary);
 	}
 	
 }

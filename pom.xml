@@ -79,7 +79,13 @@
 		    <artifactId>bootstrap</artifactId>
 		    <version>3.3.7</version>
 		</dependency>
-
+	
+	<!-- summernote -->
+	<dependency>
+	    <groupId>org.webjars.bower</groupId>
+	    <artifactId>summernote</artifactId>
+	    <version>0.8.9</version>
+	</dependency>
 		
 	</dependencies>
 
