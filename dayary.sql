@@ -16,3 +16,15 @@ insert into diary values(seq_diary_id.nextval, 'mooyounge','µÎ ¹øÂ° ÀÏ±â','ÈÞ½Ä½
 commit;
 
 select * from diary;
+delete diary;
+
+--member
+create table member(
+    id varchar2(10) primary key,
+    password varchar2(10) not null,
+    name varchar2(30) not null,
+    email varchar2(30) not null unique,
+    gender char(1) check(gender in('m','f'))
+);
+
+insert into member values('admin','admin','¾îµå¹Î','admin','m');

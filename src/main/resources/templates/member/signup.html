@@ -1,0 +1,170 @@
+<#import "/spring.ftl" as spring/>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<#include "/include/header.html"/>
+<link rel="stylesheet" href="/webjars/summernote/0.8.9/dist/summernote.css" />
+<style>
+
+.loader {
+	position:absolute;
+	top:40%;
+	left:50%;
+	z-index:1;
+	
+	text-align:center;
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+</style>
+<title>add</title>
+</head>
+<body>
+<div id="loader"></div>
+	<#include "/include/nav.html">
+	<div class="container">
+		<form action="/member/signup" method="post" class="form form-horizontal">
+			<@spring.bind "member.id"/>
+			<div class="form-group">
+				<label for="" class="control-label col-sm-2">아이디</label>
+				<div class="col-sm-8">
+					<input type="text" id="${spring.status.expression}" name="${spring.status.expression}"
+										 class="form-control" value="${spring.status.value?default('')}"/>
+					<span class="error">${spring.status.errorMessage?default('')}</span>
+				</div>
+				<div class="col-sm-2">
+					<button class="btn btn-default btn-block" type="button" onclick="dupcheck()">중복확인</button>
+				</div>
+			</div>
+			
+			<@spring.bind "member.password"/>
+			<div class="form-group">
+				<label for="" class="control-label col-sm-2">패스워드</label>
+				<div class="col-sm-5">
+					<input type="password" id="${spring.status.expression}" name="${spring.status.expression}"
+										 class="form-control" value="${spring.status.value?default('')}"/>
+					<span class="error">${spring.status.errorMessage?default('')}</span>
+				</div>
+				<@spring.bind "member.passwordConfirm"/>
+				<div class="col-sm-5">
+					<input type="password" name="passwordConfirm"
+					placeholder="패스워드 확인"	 class="form-control" value="${member.passwordConfirm?default('')}"/>
+					<span class="error">${spring.status.errorMessage?default('')}</span>
+				</div>
+			</div>
+			
+			<@spring.bind "member.name"/>
+			<div class="form-group">
+				<label for="" class="control-label col-sm-2">이름</label>
+				<div class="col-sm-10">
+					<input type="text" id="${spring.status.expression}" name="${spring.status.expression}"
+										 class="form-control" value="${spring.status.value?default('')}"/>
+					<span class="error">${spring.status.errorMessage?default('')}</span>
+				</div>
+			</div>
+			
+			<@spring.bind "member.email"/>
+			<div class="form-group">
+				<label for="" class="control-label col-sm-2">이메일</label>
+				<div class="col-sm-5">
+					<input type="text" id="${spring.status.expression}" name="${spring.status.expression}"
+										 class="form-control" value="${spring.status.value?default('')}"/>
+					<span class="error">${spring.status.errorMessage?default('')}</span>
+				</div>
+				<div class="col-sm-2">
+					<button class="btn btn-default btn-block" onclick="emailCertify(this)" type="button">인증메일 발송</button>
+				</div>
+				<@spring.bind "member.emailCode"/>
+				<div class="col-sm-3">
+					<input type="text" name="${spring.status.expression}" class="form-control"
+					 value="${spring.status.value?default('')}" placeholder="인증코드 입력"/>
+					<span id="email-error" class="error">${spring.status.errorMessage?default('')}</span>
+				</div>
+			</div>
+			<@spring.bind "member.gender" />
+			<div class="form-group">
+				<label class="control-label col-sm-2">Gender</label>
+				<div class="col-sm-10">
+					<label for="male" class="radio-inline">
+						<input id="male" type="radio" name="${spring.status.expression}" value="m"/>Male
+					</label>
+					<label for="female" class="radio-inline">
+						<input id="female" type="radio" name="${spring.status.expression}" value="f"/>Female
+					</label>
+					<span class="error">${spring.status.errorMessage?default('')}</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-10 col-sm-offset-2">
+					<button type="submit" class="btn btn-default btn-block">submit</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	
+	
+	<!-- script libary -->
+<#include "/include/footer.html">
+<script src="/webjars/summernote/0.8.9/dist/summernote.min.js"></script>
+<script src="/webjars/summernote/0.8.9/dist/lang/summernote-ko-KR.js"></script>
+<script>
+	function dupcheck(){
+		$.ajax({
+			url:"/member/dupcheck",	
+			type:"post",
+			data:{id:$("#id").val()},
+			success:function(data){
+				if(data== 'y'){
+					alert("존재하는 아이디입니다");
+				}else{
+					alert("사용 가능한 아이디 입니다.");
+				}
+			}
+		});
+	}
+	
+	function emailCertify(btn){
+		//버튼 상태 disabled
+		$(btn).attr("disabled","disabled");
+		//로딩바시작
+		$("#loader").addClass("loader");
+		$.ajax({
+			url:"/member/emailcertify",
+			type:"post",
+			data:{email:$("#email").val()},
+			success:function(data){
+				if(data == 'null'){
+					$("#email-error").text("이메일을 입력해 주세요");
+				}else if(data == 'incorrect'){
+					$("#email-error").text("이메일 형식이 올바르지 않습니다.");
+				}else if(data == 'duplicated'){
+					$("#email-error").text("이미 가입되어있는 이메일 주소입니다.");
+				}else if(data == 'error'){
+					$("#email-error").text("서버에 오류로 인해 이메일 발송을 실패했습니다.");
+				}else{
+					alert("인증메일을 전송했습니다.\n코드를 입력해 주세요.");
+					$("#email-error").text("");
+				}
+				//버튼상태 able
+				$(btn).removeAttr("disabled");
+				//로딩바 종료
+				$("#loader").removeClass("loader");
+			}
+		});
+	}
+	
+</script>
+</body>
+</html>

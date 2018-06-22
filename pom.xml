@@ -79,7 +79,12 @@
 		    <artifactId>bootstrap</artifactId>
 		    <version>3.3.7</version>
 		</dependency>
-	
+		<!-- javaMail API -->
+		<dependency>
+			<groupId>javax.mail</groupId>	
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
+		</dependency>
 	<!-- summernote -->
 	<dependency>
 	    <groupId>org.webjars.bower</groupId>
