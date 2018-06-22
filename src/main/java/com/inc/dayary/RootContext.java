@@ -24,4 +24,6 @@ public class RootContext {
 		mailSender.setJavaMailProperties(props);
 		return mailSender;
 	}
+	
+	
 }

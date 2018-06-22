@@ -2,6 +2,7 @@ package com.inc.dayary.controller;
 
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -93,6 +94,38 @@ public class MemberController {
 		session.setAttribute("email",email);
 		session.setAttribute("emailCode",emailCode);
 		return "success";
+	}
+	
+	@GetMapping("/member/signin")
+	public String signin(Model model) {
+		model.addAttribute("member",new Member());
+		return "member/signin";
+	}
+	
+	@PostMapping("/member/signin")
+	public String signin(@ModelAttribute Member member,BindingResult result,HttpServletRequest request,Model model) {
+		Member savedMember = memberService.getOne(member.getId());
+		if(savedMember == null) {
+			result.addError(new FieldError("notExsitId", "id", "존재하지 않는 아이디 입니다."));
+		}else if(!savedMember.getPassword().equals(member.getPassword())) {
+			result.addError(new FieldError("passwordNotSame", "password", "비밀번호가 일치하지 않습니다."));
+		}
+		
+		if(result.hasErrors()) {
+			//model.addAttribute(member);
+			return "member/signin";
+		}
+		
+		request.getSession().invalidate();
+		request.getSession().setAttribute("member",savedMember);
+		
+		return "redirect:/";
+	}
+	
+	@GetMapping("/member/signout")
+	public String signout(HttpServletRequest request) {
+		request.getSession().invalidate();
+		return "redirect:/";
 	}
 
 	private boolean emailValidator(String email) {
