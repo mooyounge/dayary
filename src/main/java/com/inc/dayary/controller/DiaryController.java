@@ -5,6 +5,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +38,8 @@ public class DiaryController {
 
 	@PostMapping("/diary/add")
 	public String addPost(@ModelAttribute @Valid Diary diary, BindingResult result ,Model model,HttpSession session) {
+		
+		System.out.println(diary.getTags().size());
 		if(result.hasErrors()) {
 			return "diary/add";
 		}

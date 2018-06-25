@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.inc.dayary.vo.Diary;
+import com.inc.dayary.vo.Tag;
 
 @Repository
 public class DiaryDao {

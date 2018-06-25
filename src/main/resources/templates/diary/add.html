@@ -20,7 +20,31 @@
 					<span class="error">${spring.status.errorMessages[0]?default('')}</span>
 				</div>
 			</div>
-			
+			<div class="form-group">
+				<label for="" class="control-label col-sm-2">Tag</label>
+				<div class="col-sm-10">
+					<div class="row">
+						<div class="col-sm-2">
+							<input type="text" id="tag-name" class="form-control" />
+						</div>
+						<div class="col-sm-2">
+							<select id="tag-color" class="form-control">
+								<option value="default">회색</option>
+								<option value="danger">빨강</option>
+								<option value="primary">파랑</option>
+								<option value="success">초록</option>
+								<option value="warning">노랑</option>
+							</select>
+						</div>
+						<div class="col-sm-1">
+							<button type="button" class="btn btn-default" onclick="addTag()">추가</button>
+						</div>
+						<div class="col-sm-7" id="tags">
+							
+						</div>
+					</div>
+				</div>
+			</div>
 			<@spring.bind "diary.content"/>
 			<div class="form-group">
 				<label for="" class="control-label col-sm-2">content</label>
@@ -52,6 +76,33 @@
 		maxHeight:200,
 		
 	})
+	
+	
+	var idx = 0;
+	function addTag(){
+		var $span = $('<span></span>');
+		var tag = $("#tag-name");
+		
+		var name = tag.val();
+		var color = $("#tag-color").val();
+		var labelcolor = "label-"+color;
+		
+		$span.addClass("label");
+		$span.addClass(labelcolor);
+		console.log(name);
+		$span.text(name);
+		$("#tags").append($span);
+		$("#tags").html($("#tags").html()+"&nbsp;");
+		
+		$("#tags").append("<input type='hidden' name='tags["+idx+"].name' value='"+name+"' />");
+		$("#tags").append("<input type='hidden' name='tags["+idx+"].color' value='"+color+"' />");
+		
+		idx++;
+		
+		tag.val("");
+		tag.focus();
+		
+	}
 </script>
 </body>
 </html>

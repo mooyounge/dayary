@@ -1,5 +1,7 @@
 package com.inc.dayary.vo;
 
+import java.util.List;
+
 import javax.validation.constraints.Size;
 
 public class Diary {
@@ -10,6 +12,16 @@ public class Diary {
 	private String content;
 	private String u_id;
 	private String regdate;
+	
+	private List<Tag> tags;
+	
+	
+	public List<Tag> getTags() {
+		return tags;
+	}
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
 	public int getId() {
 		return id;
 	}

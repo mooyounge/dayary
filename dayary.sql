@@ -16,6 +16,9 @@ insert into diary values(seq_diary_id.nextval, 'mooyounge','µÎ ¹øÂ° ÀÏ±â','ÈŞ½Ä½
 commit;
 
 select * from diary;
+
+alter table diary add constraint fk_diary_u_id foreign key(u_id) references member(id);
+commit;
 delete diary;
 
 --member
@@ -28,3 +31,14 @@ create table member(
 );
 
 insert into member values('admin','admin','¾îµå¹Î','admin','m');
+
+create table tag(
+    id number primary key,
+    d_id number references diary(id),
+    name varchar2(30) not null,
+    color varchar2(10) default 'default' not null
+);
+
+create sequence seq_tag_id;
+
+
