@@ -33,11 +33,13 @@ public class DiaryServiceImpl implements DiaryService{
 		
 		diaryDao.add(diary);
 		int d_id = diary.getId();
-		for(Tag tag : diary.getTags()) {
-			tag.setD_id(d_id);
-			
-			tagDao.add(tag);
+		if(diary.getTags()!=null) {
+			for(Tag tag : diary.getTags()) {
+				tag.setD_id(d_id);
+				tagDao.add(tag);
+			}
 		}
+		
 	}
 
 	@Override
